@@ -1,0 +1,586 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXORA | PC Optimize</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #070910;
+  --panel: #101522;
+  --cyan: #00e5ff;
+  --purple: #925cff;
+  --text: #f4f7ff;
+  --muted: #929bb3;
+  --border: rgba(255,255,255,.09);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, sans-serif;
+  min-height: 100vh;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at 15% 0%, #152b4970, transparent 45%),
+    radial-gradient(ellipse at 90% 20%, #55208035, transparent 40%);
+}
+button, input { font: inherit; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+header {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 7%;
+  border-bottom: 1px solid var(--border);
+  background: #080a12d9;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(18px);
+}
+.logo {
+  font: 800 23px Orbitron, sans-serif;
+  letter-spacing: -1px;
+}
+.logo span { color: var(--cyan); }
+.status {
+  color: #8bf9cb;
+  font-size: 11px;
+  margin-top: 5px;
+  letter-spacing: 2px;
+}
+nav { display: flex; gap: 8px; }
+nav button {
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 12px 15px;
+  border-radius: 9px;
+  font-size: 13px;
+  transition: .2s;
+}
+nav button:hover, nav button.active {
+  color: var(--cyan);
+  background: #00e5ff0c;
+  border-color: #00e5ff40;
+}
+.menu-btn { display: none; }
+
+main { max-width: 1200px; margin: auto; padding: 0 25px 70px; }
+.hero {
+  text-align: center;
+  padding: 90px 10px 55px;
+}
+.eyebrow {
+  color: var(--cyan);
+  letter-spacing: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 24px;
+}
+h1 {
+  font: 800 clamp(34px, 6vw, 68px)/1.12 Orbitron, sans-serif;
+  letter-spacing: -3px;
+}
+.gradient {
+  background: linear-gradient(100deg, var(--cyan), #8d7aff, #d28cff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.hero p {
+  max-width: 570px;
+  color: var(--muted);
+  margin: 23px auto 28px;
+  line-height: 1.8;
+  font-size: 14px;
+}
+.primary, .secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  padding: 14px 20px;
+  font-weight: 800;
+  font-size: 13px;
+  border: 1px solid transparent;
+  transition: .2s;
+}
+.primary {
+  background: var(--cyan);
+  color: #031017;
+}
+.primary:hover { box-shadow: 0 0 25px #00e5ff45; transform: translateY(-2px); }
+.secondary {
+  background: #ffffff08;
+  color: white;
+  border-color: var(--border);
+}
+.secondary:hover { border-color: var(--purple); }
+.hero .secondary { margin-left: 8px; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 14px;
+  margin-bottom: 65px;
+}
+.stat, .card {
+  background: linear-gradient(145deg, #121827, #0c101a);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+}
+.stat { padding: 23px; text-align: center; }
+.stat strong {
+  display: block;
+  font: 700 22px Orbitron, sans-serif;
+  color: var(--cyan);
+  margin-bottom: 8px;
+}
+.stat span { font-size: 12px; color: var(--muted); }
+
+.section { display: none; padding-top: 32px; }
+.section.active { display: block; animation: enter .3s ease; }
+@keyframes enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.section-head { margin-bottom: 28px; }
+.section-head h2 {
+  font: 700 clamp(23px, 4vw, 32px) Orbitron, sans-serif;
+  margin-bottom: 12px;
+}
+.section-head p { color: var(--muted); font-size: 13px; line-height: 1.8; }
+
+.toolbar { display: flex; gap: 12px; margin-bottom: 22px; }
+.toolbar input {
+  width: 100%; min-width: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  background: #0e1320;
+  border-radius: 10px;
+  color: white;
+  outline: none;
+}
+.toolbar input:focus { border-color: var(--cyan); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 17px;
+}
+.card { padding: 23px; transition: .25s; }
+.card:hover {
+  border-color: #00e5ff55;
+  transform: translateY(-4px);
+}
+.card-icon {
+  height: 53px; width: 53px;
+  display: grid; place-items: center;
+  border-radius: 13px;
+  background: #00e5ff12;
+  border: 1px solid #00e5ff26;
+  font-size: 26px;
+  margin-bottom: 21px;
+}
+.card h3 { font-size: 16px; margin-bottom: 11px; }
+.card p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+  margin-bottom: 19px;
+}
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  color: var(--cyan);
+  background: #00e5ff12;
+  padding: 6px 9px;
+  border-radius: 5px;
+  margin-bottom: 13px;
+}
+.card .primary, .card .secondary { width: 100%; }
+.card .price {
+  font: 700 27px Orbitron, sans-serif;
+  margin: 13px 0 20px;
+}
+.price small { font: 12px Inter, sans-serif; color: var(--muted); }
+.card ul { list-style: none; margin-bottom: 24px; }
+.card li {
+  color: #c6cce0; font-size: 12px;
+  padding: 9px 0; border-bottom: 1px solid var(--border);
+}
+.card li::before { content: "? "; color: var(--cyan); }
+
+.note {
+  padding: 17px;
+  border: 1px solid #925cff40;
+  background: #925cff0c;
+  border-radius: 10px;
+  color: #c4bddf;
+  font-size: 12px;
+  line-height: 1.8;
+  margin-bottom: 22px;
+}
+.steps { display: grid; gap: 12px; margin-bottom: 20px; }
+.step {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px; border: 1px solid var(--border);
+  border-radius: 10px; background: #ffffff04;
+}
+.step input { accent-color: var(--cyan); width: 17px; height: 17px; }
+.step label { flex: 1; font-size: 13px; line-height: 1.7; }
+.step small { display: block; color: var(--muted); font-size: 11px; }
+.progress {
+  height: 5px; background: #202638;
+  border-radius: 8px; margin: 18px 0;
+  overflow: hidden;
+}
+.progress div {
+  height: 100%; width: 0;
+  background: var(--cyan); transition: width .25s;
+}
+footer {
+  border-top: 1px solid var(--border);
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 2;
+}
+.toast {
+  position: fixed; bottom: 25px; right: 25px;
+  max-width: 320px; padding: 16px 20px;
+  border: 1px solid #00e5ff55;
+  background: #101827; border-radius: 10px;
+  color: white; font-size: 13px;
+  display: none; z-index: 30;
+}
+
+@media(max-width:800px) {
+  header { padding: 0 5%; }
+  .logo { font-size: 19px; }
+  .menu-btn { display: block; background: none; color: white; border: 0; font-size: 23px; }
+  nav {
+    display: none; position: absolute; top: 76px; left: 0; right: 0;
+    padding: 15px; background: #0b0e18;
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+  }
+  nav.open { display: flex; }
+  nav button { text-align: left; }
+  .grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .hero { padding-top: 65px; }
+}
+@media(max-width:520px) {
+  main { padding: 0 16px 50px; }
+  .grid { grid-template-columns: 1fr; }
+  .stats { gap: 8px; }
+  .stat { padding: 17px 6px; }
+  .stat strong { font-size: 16px; }
+  .stat span { font-size: 10px; }
+  .hero .secondary { margin: 10px 0 0; }
+  .toolbar { flex-direction: column; }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <a class="logo" href="#" onclick="showHome();return false">
+    NEXORA<span>.</span>
+    <div class="status">? GAMING PERFORMANCE</div>
+  </a>
+  <button class="menu-btn" onclick="toggleMenu()" aria-label="Open menu">?</button>
+  <nav id="nav">
+    <button class="active" data-tab="emulators" onclick="showTab('emulators')">Emulators</button>
+    <button data-tab="free" onclick="showTab('free')">Free Optimizer</button>
+    <button data-tab="buy" onclick="showTab('buy')">Buy Optimize</button>
+  </nav>
+</header>
+
+<main>
+  <div id="home">
+    <section class="hero">
+      <div class="eyebrow">YOUR PC · YOUR RULES</div>
+      <h1>UNLOCK YOUR<br><span class="gradient">PC POTENTIAL</span></h1>
+      <p>
+        Discover gaming emulators, explore free PC optimization
+        tips, and find the right performance service for your setup.
+      </p>
+      <button class="primary" onclick="showTab('emulators')">EXPLORE EMULATORS ?</button>
+      <button class="secondary" onclick="showTab('free')">FREE OPTIMIZER</button>
+    </section>
+
+    <div class="stats">
+      <div class="stat"><strong>03</strong><span>POWERFUL SECTIONS</span></div>
+      <div class="stat"><strong>FREE</strong><span>PC TIPS & CHECKLIST</span></div>
+      <div class="stat"><strong>GAMING</strong><span>BUILT FOR PLAYERS</span></div>
+    </div>
+  </div>
+
+  <!-- TAB 1: EMULATORS -->
+  <section id="emulators" class="section active">
+    <div class="section-head">
+      <div class="eyebrow">GAMING ZONE / 01</div>
+      <h2>ANDROID <span class="gradient">EMULATORS</span></h2>
+      <p>Find an Android emulator for Free Fire and other mobile games on PC.</p>
+    </div>
+
+    <div class="toolbar">
+      <input id="emulatorSearch" placeholder="Search emulators..." oninput="filterEmulators()" aria-label="Search emulators">
+    </div>
+
+    <div class="grid" id="emulatorGrid">
+      <article class="card emulator" data-name="gameloop free fire gaming">
+        <div class="card-icon">??</div>
+        <span class="tag">GAMING</span>
+        <h3>GameLoop</h3>
+        <p>Android gaming emulator. Check current game compatibility and system requirements before installing.</p>
+        <a class="primary" href="https://www.gameloop.com/" target="_blank" rel="noopener noreferrer">OFFICIAL WEBSITE ?</a>
+      </article>
+
+      <article class="card emulator" data-name="bluestacks free fire android">
+        <div class="card-icon">?</div>
+        <span class="tag">POPULAR</span>
+        <h3>BlueStacks</h3>
+        <p>Android app player with configurable controls and performance settings.</p>
+        <a class="primary" href="https://www.bluestacks.com/" target="_blank" rel="noopener noreferrer">OFFICIAL WEBSITE ?</a>
+      </article>
+
+      <article class="card emulator" data-name="ldplayer free fire android">
+        <div class="card-icon">??</div>
+        <span class="tag">PERFORMANCE</span>
+        <h3>LDPlayer</h3>
+        <p>Android emulator with gaming controls and configurable CPU and memory settings.</p>
+        <a class="primary" href="https://www.ldplayer.net/" target="_blank" rel="noopener noreferrer">OFFICIAL WEBSITE ?</a>
+      </article>
+
+      <article class="card emulator" data-name="memu play android">
+        <div class="card-icon">???</div>
+        <span class="tag">ALTERNATIVE</span>
+        <h3>MEmu Play</h3>
+        <p>An Android emulator alternative for apps and mobile games on a Windows PC.</p>
+        <a class="primary" href="https://www.memuplay.com/" target="_blank" rel="noopener noreferrer">OFFICIAL WEBSITE ?</a>
+      </article>
+
+      <article class="card emulator" data-name="noxplayer android">
+        <div class="card-icon">??</div>
+        <span class="tag">ANDROID</span>
+        <h3>NoxPlayer</h3>
+        <p>Android app player. Review the official compatibility and hardware information.</p>
+        <a class="primary" href="https://www.bignox.com/" target="_blank" rel="noopener noreferrer">OFFICIAL WEBSITE ?</a>
+      </article>
+
+      <article class="card emulator" data-name="add emulator custom">
+        <div class="card-icon">+</div>
+        <span class="tag">YOUR CHOICE</span>
+        <h3>More Emulators</h3>
+        <p>Want to list another emulator? Edit this HTML file and duplicate an emulator card.</p>
+        <button class="secondary" onclick="notify('Edit index.html and duplicate an emulator card to add another.')">HOW TO ADD ?</button>
+      </article>
+    </div>
+    <p id="noResults" style="display:none;color:#929bb3;margin-top:20px">No matching emulators found.</p>
+  </section>
+
+  <!-- TAB 2: FREE OPTIMIZER -->
+  <section id="free" class="section">
+    <div class="section-head">
+      <div class="eyebrow">PERFORMANCE LAB / 02</div>
+      <h2>FREE <span class="gradient">OPTIMIZER</span></h2>
+      <p>A simple checklist to help you review your PC's performance safely.</p>
+    </div>
+
+    <div class="note">
+      NOTE: This checklist does not automatically modify Windows.
+      Tick each task after you complete it. Avoid unknown debloat scripts
+      and do not disable security, drivers, or essential Windows services.
+    </div>
+
+    <div class="card">
+      <h3>PC OPTIMIZATION CHECKLIST</h3>
+      <p>Complete these recommended maintenance steps.</p>
+
+      <div class="progress"><div id="progressBar"></div></div>
+      <p id="progressText">0 of 6 tasks completed</p>
+
+      <div class="steps">
+        <div class="step"><input type="checkbox" id="c1" onchange="updateProgress()"><label for="c1">Review startup apps<small>Settings ? Apps ? Startup</small></label></div>
+        <div class="step"><input type="checkbox" id="c2" onchange="updateProgress()"><label for="c2">Update graphics drivers<small>Use the official NVIDIA, AMD, or Intel website/app</small></label></div>
+        <div class="step"><input type="checkbox" id="c3" onchange="updateProgress()"><label for="c3">Check Windows updates<small>Settings ? Windows Update</small></label></div>
+        <div class="step"><input type="checkbox" id="c4" onchange="updateProgress()"><label for="c4">Free up storage safely<small>Settings ? System ? Storage</small></label></div>
+        <div class="step"><input type="checkbox" id="c5" onchange="updateProgress()"><label for="c5">Enable Game Mode if suitable<small>Settings ? Gaming ? Game Mode</small></label></div>
+        <div class="step"><input type="checkbox" id="c6" onchange="updateProgress()"><label for="c6">Check temperatures and airflow<small>Keep vents clear and monitor CPU/GPU temperatures</small></label></div>
+      </div>
+
+      <button class="primary" onclick="resetChecklist()">RESET CHECKLIST ?</button>
+    </div>
+  </section>
+
+  <!-- TAB 3: BUY OPTIMIZE -->
+  <section id="buy" class="section">
+    <div class="section-head">
+      <div class="eyebrow">PREMIUM SERVICES / 03</div>
+      <h2>BUY <span class="gradient">OPTIMIZE</span></h2>
+      <p>Present your PC optimization services with custom packages and contact links.</p>
+    </div>
+
+    <div class="note">
+      These are sample packages for your website. Set your real prices,
+      service details and contact information before publishing.
+    </div>
+
+    <div class="grid">
+      <article class="card">
+        <div class="card-icon">???</div>
+        <span class="tag">STARTER</span>
+        <h3>Basic Optimize</h3>
+        <div class="price">LKR 500</div>
+        <ul>
+          <li>Basic PC settings review</li>
+          <li>Startup app recommendations</li>
+          <li>Gaming settings guidance</li>
+          <li>Basic support</li>
+        </ul>
+        <button class="primary" onclick="buyPackage('Basic Optimize')">CONTACT TO BUY ?</button>
+      </article>
+
+      <article class="card" style="border-color:#00e5ff55">
+        <div class="card-icon">?</div>
+        <span class="tag">POPULAR</span>
+        <h3>Gaming Optimize</h3>
+        <div class="price">LKR 1,000</div>
+        <ul>
+          <li>Gaming performance review</li>
+          <li>Emulator settings guidance</li>
+          <li>Graphics settings review</li>
+          <li>Temperature and airflow advice</li>
+        </ul>
+        <button class="primary" onclick="buyPackage('Gaming Optimize')">CONTACT TO BUY ?</button>
+      </article>
+
+      <article class="card">
+        <div class="card-icon">??</div>
+        <span class="tag">PREMIUM</span>
+        <h3>Ultimate Optimize</h3>
+        <div class="price">LKR 2,000</div>
+        <ul>
+          <li>Detailed PC review</li>
+          <li>Game-specific recommendations</li>
+          <li>Windows maintenance guidance</li>
+          <li>Follow-up support</li>
+        </ul>
+        <button class="primary" onclick="buyPackage('Ultimate Optimize')">CONTACT TO BUY ?</button>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="logo">NEXORA<span>.</span></div>
+  <p>LEVEL UP YOUR SETUP.</p>
+  <p>Independent gaming resource. Third-party emulator names belong to their respective owners.</p>
+  <p>© <span id="year"></span> NEXORA. All rights reserved.</p>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const nav = document.getElementById('nav');
+
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(section => {
+    section.classList.toggle('active', section.id === id);
+  });
+
+  document.querySelectorAll('nav button').forEach(button => {
+    button.classList.toggle('active', button.dataset.tab === id);
+  });
+
+  document.getElementById('home').style.display = 'none';
+  nav.classList.remove('open');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showHome() {
+  document.querySelectorAll('.section').forEach(section =>
+    section.classList.remove('active')
+  );
+  document.getElementById('home').style.display = 'block';
+  nav.classList.remove('open');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleMenu() {
+  nav.classList.toggle('open');
+}
+
+function filterEmulators() {
+  const query = document.getElementById('emulatorSearch').value.toLowerCase();
+  let visible = 0;
+
+  document.querySelectorAll('.emulator').forEach(card => {
+    const match = (card.innerText + ' ' + card.dataset.name).toLowerCase().includes(query);
+    card.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+
+  document.getElementById('noResults').style.display = visible ? 'none' : 'block';
+}
+
+function updateProgress() {
+  const boxes = [...document.querySelectorAll('.steps input')];
+  const completed = boxes.filter(box => box.checked).length;
+  document.getElementById('progressBar').style.width =
+    (completed / boxes.length * 100) + '%';
+  document.getElementById('progressText').textContent =
+    `${completed} of ${boxes.length} tasks completed`;
+}
+
+function resetChecklist() {
+  document.querySelectorAll('.steps input').forEach(box => box.checked = false);
+  updateProgress();
+  notify('Checklist reset successfully.');
+}
+
+function notify(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.style.display = 'block';
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => toast.style.display = 'none', 3500);
+}
+
+function buyPackage(packageName) {
+  // Replace this with your real WhatsApp number.
+  const whatsappNumber = '947XXXXXXXX';
+  const message = `Hi! I am interested in the ${packageName} package.`;
+  const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+  if (whatsappNumber.includes('X')) {
+    notify('Set your WhatsApp number in index.html to activate this button.');
+    return;
+  }
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+document.getElementById('year').textContent = new Date().getFullYear();
+updateProgress();
+</script>
+</body>
+</html>
